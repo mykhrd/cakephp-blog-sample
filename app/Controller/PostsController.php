@@ -1,8 +1,10 @@
 <?php
+App::uses('AppController', 'Controller');
 
 class PostsController extends AppController
 {
-    public $helpers = array('Html', 'Form');
+    public $helpers = array('Html', 'Form', 'Flash');
+    public $components = array('Flash');
 
     //index
     public function index()
@@ -30,9 +32,10 @@ class PostsController extends AppController
     //add
     public function add()
     {
-        // if request is post, save the data using the post model with $this->Post->create();
+        // if request is post, save the data using the post model with
         if ($this->request->is('post')) {
             $this->Post->create();
+            $this->request->data['Post']['user_id'] = $this->Auth->user('id');
             // if data is saved, show success message and return to index
             if ($this->Post->save($this->request->data)) {
                 $this->Flash->success(__('Your post has been saved.'));
@@ -94,6 +97,24 @@ class PostsController extends AppController
         }
         // if all is processed, return to index
         return $this->redirect(array('action' => 'index'));
+    }
+
+    public function isAuthorized($user)
+    {
+        // All registered users can add posts
+        if ($this->action === 'add') {
+            return true;
+        }
+
+        // The owner of a post can edit and delete it
+        if (in_array($this->action, array('edit', 'delete'))) {
+            $postId = (int)$this->request->params['pass'][0];
+            if ($this->Post->isOwnedBy($postId, $user['id'])) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
     }
 
 }

@@ -12,9 +12,9 @@
         <th>Created</th>
     </tr>
 
-    <!-- Here is where we loop through our $posts array, printing out post info -->
-
-    <?php foreach ($posts as $post): ?>
+    <?php
+    //start loop
+    foreach ($posts as $post): ?>
         <tr>
             <td><?php echo $post['Post']['id']; ?></td>
             <td>
@@ -29,6 +29,7 @@
                 );
                 ?>
                 <?php
+                // postLink(); uses JavaScript to do a POST request for deleting the post
                 echo $this->Form->postLink(
                     'Delete',
                     array('controller' => 'posts', 'action' => 'delete', $post['Post']['id']),

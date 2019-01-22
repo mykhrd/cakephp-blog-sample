@@ -54,7 +54,6 @@ class AppController extends Controller
 
     public function isAuthorized($user)
     {
-        // Admin can access every action
         if (isset($user)) {
             return true;
         }
@@ -65,6 +64,8 @@ class AppController extends Controller
 
     public function beforeFilter()
     {
-        $this->Auth->allow('index', 'view');
+//        if (isset($user)) {
+//            $this->Auth->allow('index', 'view');
+//        }
     }
 }

@@ -1,4 +1,4 @@
-<h1>Blog posts</h1>
+<h1>Blog Posts</h1>
 <?php echo $this->Html->link(
     'Add Post',
     array('controller' => 'posts', 'action' => 'add')

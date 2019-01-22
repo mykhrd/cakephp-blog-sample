@@ -1,3 +1,7 @@
+<?php
+App::import('Controller', 'Users');
+?>
+
 <h1>Blog Posts</h1>
 <p>
     user:<?php echo AuthComponent::user('username') ?>
@@ -17,6 +21,7 @@
         <th>Title</th>
         <th>Actions</th>
         <th>Created</th>
+        <th>Author</th>
     </tr>
 
     <?php
@@ -44,6 +49,13 @@
                 ?>
             </td>
             <td><?php echo $post['Post']['created']; ?></td>
+            <td>
+                <?php
+                $UsersController = new UsersController;
+                $Username = $UsersController->getUsernameById($post['Post']['user_id']);
+                echo $Username['User']['username'];
+                ?>
+            </td>
         </tr>
     <?php endforeach; ?>
     <?php unset($post); ?>

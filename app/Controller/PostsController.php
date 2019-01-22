@@ -102,6 +102,12 @@ class PostsController extends AppController
     public function isAuthorized($user)
     {
         // All registered users can add posts
+        if (in_array($this->action, array('index', 'view'))) {
+            if (isset($user)) {
+                return true;
+            }
+        }
+
         if ($this->action === 'add') {
             return true;
         }

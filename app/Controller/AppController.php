@@ -40,8 +40,8 @@ class AppController extends Controller
                 'action' => 'index'
             ),
             'logoutRedirect' => array(
-                'controller' => 'posts',
-                'action' => 'index'
+                'controller' => 'users',
+                'action' => 'login'
             ),
             'authenticate' => array(
                 'Form' => array(
@@ -54,7 +54,11 @@ class AppController extends Controller
 
     public function isAuthorized($user)
     {
-        if (isset($user)) {
+//        if (isset($user)) {
+//            return true;
+//        }
+
+        if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }
 
@@ -64,8 +68,8 @@ class AppController extends Controller
 
     public function beforeFilter()
     {
-//        if (isset($user)) {
-//            $this->Auth->allow('index', 'view');
-//        }
+        //if (isset($user)) {
+        //$this->Auth->allow('index', 'view');
+        //}
     }
 }

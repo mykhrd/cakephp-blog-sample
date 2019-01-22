@@ -6,6 +6,7 @@
         array('controller' => 'users', 'action' => 'logout')
     ); ?>
 </p>
+<?php echo $this->Flash->render('auth'); ?>
 <?php echo $this->Html->link(
     'Add Post',
     array('controller' => 'posts', 'action' => 'add')

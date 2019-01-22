@@ -8,7 +8,7 @@ class UsersController extends AppController
     {
         parent::beforeFilter();
         // Allow users to register and logout.
-        // $this->Auth->allow('add', 'logout');
+        $this->Auth->allow('add', 'logout');
     }
 
     public function index()
@@ -77,9 +77,6 @@ class UsersController extends AppController
 
     public function delete($id = null)
     {
-        // Prior to 2.5 use
-        // $this->request->onlyAllow('post');
-
         $this->request->allowMethod('post');
 
         $this->User->id = $id;

@@ -1,16 +1,9 @@
 <pre>
-    <?php print_r($posts) ?>
+    <?php
+    print_r($posts)
+    ?>
 </pre>
-
 <h1>Blog Posts</h1>
-<p>
-    user:<?php echo AuthComponent::user('username') ?>
-    <?php echo $this->Html->link(
-        'Logout',
-        array('controller' => 'users', 'action' => 'logout')
-    ); ?>
-</p>
-<?php echo $this->Flash->render('auth'); ?>
 <?php echo $this->Html->link(
     'Add Post',
     array('controller' => 'posts', 'action' => 'add')
@@ -21,6 +14,7 @@
         <th>Title</th>
         <th>Actions</th>
         <th>Created</th>
+        <th>Category</th>
         <th>Author</th>
     </tr>
 
@@ -49,13 +43,8 @@
                 ?>
             </td>
             <td><?php echo $post['Post']['created']; ?></td>
-            <td><?php echo $post['User']['username']; ?>
-                <?php
-                //$UsersController = new UsersController;
-                //$Username = $UsersController->getUsernameById($post['Post']['user_id']);
-                //echo $Username['User']['username'];
-                ?>
-            </td>
+            <td><?php echo $post['Category']['title']; ?></td>
+            <td><?php echo $post['User']['username']; ?></td>
         </tr>
     <?php endforeach; ?>
     <?php unset($post); ?>

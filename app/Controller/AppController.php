@@ -54,22 +54,12 @@ class AppController extends Controller
 
     public function isAuthorized($user)
     {
-//        if (isset($user)) {
-//            return true;
-//        }
 
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
         }
 
-        // Default deny
         return false;
     }
 
-    public function beforeFilter()
-    {
-        //if (isset($user)) {
-        //$this->Auth->allow('index', 'view');
-        //}
-    }
 }

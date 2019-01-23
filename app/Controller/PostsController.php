@@ -3,6 +3,7 @@ App::uses('AppController', 'Controller');
 
 class PostsController extends AppController
 {
+    var $uses = array('Post', 'Category');
     public $helpers = array('Html', 'Form', 'Flash');
     public $components = array('Flash');
 
@@ -10,25 +11,25 @@ class PostsController extends AppController
     public function index()
     {
         $uid = $this->Auth->user('id');
-        $this->set('posts', $this->Post->find('all', array(
-            'fields' => array(
-                'id', 'title',
-                'created',
-                'User.username'),
-            'conditions' => array('User.id =' => $uid)
-        )));
 
+        $conditions = array('User.id =' => $uid);
         if ($uid === '1') {
-            $this->set('posts', $this->Post->find('all', array(
-                'fields' => array(
-                    'id', 'title',
-                    'created',
-                    'User.username')
-            )));
+            $conditions = array();
         }
 
-        //debug($uid);
-        //exit;
+        $posts = $this->Post->find('all', array(
+            'conditions' => $conditions,
+            'fields' => array(
+                'id',
+                'title',
+                'created',
+                'category_id',
+                'User.username',
+                'Category.title'
+
+            ),
+        ));
+        $this->set('posts', $posts);
     }
 
     //view
@@ -50,6 +51,14 @@ class PostsController extends AppController
     //add
     public function add()
     {
+        $categories = $this->Category->find('list', array(
+            'fields' => array(
+                'id',
+                'title',
+            ),
+        ));
+        $this->set('categories', $categories);
+
         // if request is post, save the data using the post model with
         if ($this->request->is('post')) {
             $this->Post->create();
@@ -67,6 +76,14 @@ class PostsController extends AppController
     //edit
     public function edit($id = null)
     {
+        $categories = $this->Category->find('list', array(
+            'fields' => array(
+                'id',
+                'title',
+            ),
+        ));
+        $this->set('categories', $categories);
+
         // if $id is not correct, show invalid post error
         if (!$id) {
             throw new NotFoundException(__('Invalid post'));

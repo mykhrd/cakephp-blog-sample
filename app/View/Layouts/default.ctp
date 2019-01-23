@@ -20,44 +20,82 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <!DOCTYPE html>
 <html>
 <head>
-	<?php echo $this->Html->charset(); ?>
-	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $this->fetch('title'); ?>
-	</title>
-	<?php
-		echo $this->Html->meta('icon');
-
-		echo $this->Html->css('cake.generic');
-
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
-		echo $this->fetch('script');
-	?>
+    <?php echo $this->Html->charset(); ?>
+    <title>
+        <?php echo $cakeDescription ?>:
+        <?php echo $this->fetch('title'); ?>
+    </title>
+    <?php
+    echo $this->Html->meta('icon');
+    echo $this->Html->css('cake.generic');
+    echo $this->fetch('meta');
+    echo $this->fetch('css');
+    echo $this->fetch('script');
+    ?>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'https://cakephp.org'); ?></h1>
-		</div>
-		<div id="content">
+<div id="container">
+    <div id="header">
+        <p><?php if (AuthComponent::user('id')) { ?>
+                user: <?php echo AuthComponent::user('username') ?>
+            <?php } ?>
 
-			<?php echo $this->Flash->render(); ?>
+            <?php
+            if (AuthComponent::user('id')) {
+                echo $this->Html->link(
+                    'Logout',
+                    array('controller' => 'users', 'action' => 'logout')
+                );
+            }
+            ?>
+        </p>
+        <p>
+            <?php
+            if (AuthComponent::user('id')) {
+                echo $this->Html->link(
+                    'Manage Posts',
+                    array('controller' => 'posts', 'action' => 'index')
+                );
+            }
+            ?>
 
-			<?php echo $this->fetch('content'); ?>
-		</div>
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'https://cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-			?>
-			<p>
-				<?php echo $cakeVersion; ?>
-			</p>
-		</div>
-	</div>
-	<?php echo $this->element('sql_dump'); ?>
+            <?php
+            if (AuthComponent::user('id') === '1') {
+                echo $this->Html->link(
+                    'Manage Users',
+                    array('controller' => 'users', 'action' => 'index')
+                );
+            }
+            ?>
+
+            <?php
+            if (AuthComponent::user('id')) {
+                echo $this->Html->link(
+                    'Manage Categories',
+                    array('controller' => 'categories', 'action' => 'index')
+                );
+            }
+            ?>
+        </p>
+    </div>
+    <div id="content">
+
+        <?php echo $this->Flash->render(); ?>
+
+        <?php echo $this->fetch('content'); ?>
+    </div>
+    <div id="footer">
+        <?php echo $this->Html->link(
+            $this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
+            'https://cakephp.org/',
+            array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
+        );
+        ?>
+        <p>
+            <?php echo $cakeVersion; ?>
+        </p>
+    </div>
+</div>
+<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>

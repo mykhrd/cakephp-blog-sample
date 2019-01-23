@@ -1,11 +1,4 @@
 <h1>Blog Users</h1>
-<p>
-    user:<?php echo AuthComponent::user('username') ?>
-    <?php echo $this->Html->link(
-        'Logout',
-        array('controller' => 'users', 'action' => 'logout')
-    ); ?>
-</p>
 <?php echo $this->Html->link(
     'Add User',
     array('controller' => 'users', 'action' => 'add')

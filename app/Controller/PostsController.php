@@ -9,8 +9,26 @@ class PostsController extends AppController
     //index
     public function index()
     {
-        // set data for posts
-        $this->set('posts', $this->Post->find('all'));
+        $uid = $this->Auth->user('id');
+        $this->set('posts', $this->Post->find('all', array(
+            'fields' => array(
+                'id', 'title',
+                'created',
+                'User.username'),
+            'conditions' => array('User.id =' => $uid)
+        )));
+
+        if ($uid === '1') {
+            $this->set('posts', $this->Post->find('all', array(
+                'fields' => array(
+                    'id', 'title',
+                    'created',
+                    'User.username')
+            )));
+        }
+
+        //debug($uid);
+        //exit;
     }
 
     //view

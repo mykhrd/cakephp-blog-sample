@@ -1,8 +1,8 @@
-<pre>
-    <?php
-    print_r($posts)
-    ?>
-</pre>
+<!--<pre>-->
+<!--    --><?php
+//    print_r($posts)
+//    ?>
+<!--</pre>-->
 <h1>Blog Posts</h1>
 <?php echo $this->Html->link(
     'Add Post',

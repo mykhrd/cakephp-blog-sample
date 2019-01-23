@@ -1,6 +1,6 @@
-<?php
-App::import('Controller', 'Users');
-?>
+<pre>
+    <?php print_r($posts) ?>
+</pre>
 
 <h1>Blog Posts</h1>
 <p>
@@ -49,11 +49,11 @@ App::import('Controller', 'Users');
                 ?>
             </td>
             <td><?php echo $post['Post']['created']; ?></td>
-            <td>
+            <td><?php echo $post['User']['username']; ?>
                 <?php
-                $UsersController = new UsersController;
-                $Username = $UsersController->getUsernameById($post['Post']['user_id']);
-                echo $Username['User']['username'];
+                //$UsersController = new UsersController;
+                //$Username = $UsersController->getUsernameById($post['Post']['user_id']);
+                //echo $Username['User']['username'];
                 ?>
             </td>
         </tr>

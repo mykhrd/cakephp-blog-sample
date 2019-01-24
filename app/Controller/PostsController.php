@@ -26,6 +26,7 @@ class PostsController extends AppController
                 'created',
                 'category_id',
                 'User.username',
+                'Category.id',
                 'Category.title'
 
             ),
@@ -107,6 +108,7 @@ class PostsController extends AppController
             $this->Flash->error(__('Unable to update your post.'));
         }
         // If there is no data set to $this->request->data, set data to previous post record retrieved
+
         if (!$this->request->data) {
             $this->request->data = $post;
         }

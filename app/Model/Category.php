@@ -20,6 +20,14 @@ class Category extends AppModel
         )
     );
 
+    public $hasMany = array(
+        'Post' => array(
+            'className' => 'Post',
+            'foreignKey' => 'category_id',
+            //'dependent' => true
+        )
+    );
+
     public function isOwnedBy($post, $user)
     {
         return $this->field('id', array('id' => $post, 'user_id' => $user)) !== false;

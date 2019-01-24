@@ -137,20 +137,25 @@ class PostsController extends AppController
     public function isAuthorized($user)
     {
         // registered user can view index
-        if (in_array($this->action, array('index', 'view', 'add'))) {
+        if (in_array($this->action, array('index', 'add'))) {
             if (isset($user)) {
                 return true;
             }
         }
 
-        // The owner of a post can edit and delete it
-        if (in_array($this->action, array('edit', 'delete'))) {
+        // The owner of a post can edit, view and delete it
+        if (in_array($this->action, array('edit', 'delete', 'view'))) {
+
             $postId = (int)$this->request->params['pass'][0];
-            if ($this->Post->isOwnedBy($postId, $user['id'])) {
+            if ($this->Post->isOwnedBy($postId, $user['id']) || $user['role'] === 'admin') {
                 return true;
+            } else {
+                $this->Flash->error(
+                    __('Error')
+                );
+                return $this->redirect(array('action' => 'index'));
             }
         }
-
         return parent::isAuthorized($user);
     }
 

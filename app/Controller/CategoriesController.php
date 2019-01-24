@@ -83,44 +83,26 @@ class CategoriesController extends AppController
 
     public function isAuthorized($user)
     {
-//        if (in_array($this->action, array('index', 'view', 'add'))) {
-//            if (isset($user)) {
-//                return true;
-//            }
-//        }
-//
-//        if (in_array($this->action, array('edit', 'delete'))) {
-//            $categoryId = (int)$this->request->params['pass'][0];
-//            if ($this->Category->isOwnedBy($categoryId, $user['id'])) {
-//                return true;
-//            } else {
-//                $this->Flash->error(
-//                    __('Action not permitted', h($id))
-//                );
-//            }
-//        }
-//
-//        return parent::isAuthorized($user);
-
-
         // registered user can view index
-        if (in_array($this->action, array('index', 'view', 'add'))) {
+        if (in_array($this->action, array('index', 'add'))) {
             if (isset($user)) {
                 return true;
             }
         }
 
-        // The owner of a post can edit and delete it
-        if (in_array($this->action, array('edit', 'delete'))) {
+        // The owner of a post can edit, view and delete it
+        if (in_array($this->action, array('edit', 'delete', 'view'))) {
+
             $categoryId = (int)$this->request->params['pass'][0];
-            if ($this->Category->isOwnedBy($categoryId, $user['id'])) {
+            if ($this->Category->isOwnedBy($categoryId, $user['id']) || $user['role'] === 'admin') {
                 return true;
+            } else {
+                $this->Flash->error(
+                    __('Error')
+                );
+                return $this->redirect(array('action' => 'index'));
             }
         }
-
         return parent::isAuthorized($user);
-
     }
-
-
 }

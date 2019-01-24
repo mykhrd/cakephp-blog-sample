@@ -90,4 +90,14 @@ class UsersController extends AppController
         return $this->redirect(array('action' => 'index'));
     }
 
+    public function isAuthorized($user)
+    {
+        if ($user['role'] === 'admin') {
+            return true;
+        } else {
+            $this->Flash->error(__('Error'));
+            $this->redirect(array('controller' => 'posts', 'action' => 'index'));
+        }
+        return parent::isAuthorized($user);
+    }
 }

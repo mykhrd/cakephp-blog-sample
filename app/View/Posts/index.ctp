@@ -42,7 +42,7 @@
                 );
                 ?>
             </td>
-            <td><?php echo $post['Post']['created']; ?></td>
+            <td><?php echo h($post['Post']['created']); ?></td>
             <td><?php echo $post['Category']['title']; ?></td>
             <td><?php echo $post['User']['username']; ?></td>
         </tr>

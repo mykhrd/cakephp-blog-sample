@@ -10,10 +10,11 @@ class PostsController extends AppController
     //index
     public function index()
     {
-        $uid = $this->Auth->user('id');
+        $role = $this->Auth->user('role');
 
-        $conditions = array('User.id =' => $uid);
-        if ($uid === '1') {
+        $conditions = array('User.role =' => $role);
+
+        if ($role === 'admin') {
             $conditions = array();
         }
 

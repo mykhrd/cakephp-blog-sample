@@ -60,7 +60,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             ?>
 
             <?php
-            if (AuthComponent::user('id') === '1') {
+            if (AuthComponent::user('role') === 'admin') {
                 echo $this->Html->link(
                     'Manage Users',
                     array('controller' => 'users', 'action' => 'index')

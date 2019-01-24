@@ -21,7 +21,7 @@
                 <?php
                 $user = AuthComponent::user('username');
 
-                if (AuthComponent::user('id') === '1' || $category['User']['username'] === $user) {
+                if (AuthComponent::user('role') === 'admin' || $category['User']['username'] === $user) {
                     echo $this->Html->link(
                         'Edit',
                         array('controller' => 'categories', 'action' => 'edit', $category['Category']['id']),

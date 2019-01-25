@@ -64,47 +64,27 @@ class CategoriesController extends AppController
         }
     }
 
+    //delete
     public function delete($id)
     {
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
 
-        if ($this->request->is(array('post', 'put'))) {
-            //$postlist = $this->Category->findById($id);
-            //find posts with category_id cakephp
-            //$this->Category->id = $id;
-//            $this->Category->id = $id;
-//            $postlist = $this->Category->find('all', array(
-//                'fields' => array(
-//                    'id',
-//                    'title',
-//                    'created'
-//                ),
-//            ));
-//            $postList = $this->Post->find('list', array(
-//                'conditions' => array('Post.category_id' => $id),
-//                'fields' => array('id', 'Post.category_id')
-//            ));
-
-            $conditions = array('Post.category_id' => $id);
-
-            $this->Post->updateAll(array('Post.category_id' => null),
-                $conditions);
-
-
-//            debug($this->Post->updateAll(
-//                array('Post.category_id' => null)
-//            ));
-//            exit;
-
-
-        }
 
         if ($this->Category->delete($id)) {
+
+            $conditions = array('Post.category_id' => $id);
+            $this->Post->updateAll(array(
+                $conditions,
+                'Post.category_id' => null
+            ));
+
             $this->Flash->success(
                 __('The category with id: %s has been deleted.', h($id))
             );
+
+
         } else {
             $this->Flash->error(
                 __('The category with id: %s could not be deleted.', h($id))

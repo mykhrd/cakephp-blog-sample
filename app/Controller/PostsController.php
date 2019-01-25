@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class PostsController extends AppController
 {
-    var $uses = array('Post', 'Category');
+    public $uses = array('Post', 'Category');
     public $helpers = array('Html', 'Form', 'Flash');
     public $components = array('Flash');
 
@@ -12,13 +12,20 @@ class PostsController extends AppController
     {
         $role = $this->Auth->user('role');
 
-        $conditions = array('User.role =' => $role);
+        //$is_deleted = array('is_deleted =' => 0);
+        $conditions = array(
+            'User.role =' => $role,
+            'is_deleted =' => 0
+        );
 
         if ($role === 'admin') {
-            $conditions = array();
+            $conditions = array(
+                'is_deleted =' => 0
+            );
         }
 
         $posts = $this->Post->find('all', array(
+            //'conditions' => array($is_deleted, $conditions),
             'conditions' => $conditions,
             'fields' => array(
                 'id',
@@ -117,14 +124,20 @@ class PostsController extends AppController
     /** Delete function
      *  This function deletes post specified by $id
      */
-    public function delete($id)
+    public function delete($id = null)
     {
         // if the delete request is GET, throw MethodNotAllowedException
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
-        // if deletion is a success show success message, else throw an error
-        if ($this->Post->delete($id)) {
+
+        if ($this->request->is(array('post', 'put'))) {
+
+            //update is_deleted field value to true
+            $data = array('id' => $id, 'is_deleted' => 1);
+            $this->Post->save($data);
+
+
             $this->Flash->success(
                 __('The post with id: %s has been deleted.', h($id))
             );
@@ -133,6 +146,17 @@ class PostsController extends AppController
                 __('The post with id: %s could not be deleted.', h($id))
             );
         }
+
+        // if deletion is a success show success message, else throw an error
+//        if ($this->Post->delete($id)) {
+//            $this->Flash->success(
+//                __('The post with id: %s has been deleted.', h($id))
+//            );
+//        } else {
+//            $this->Flash->error(
+//                __('The post with id: %s could not be deleted.', h($id))
+//            );
+//        }
         // if all is processed, return to index
         return $this->redirect(array('action' => 'index'));
     }

@@ -1,8 +1,8 @@
-<pre>
-    <?php
-    print_r($categories);
-    ?>
-</pre>
+<!--<pre>-->
+<!--    --><?php
+//    print_r($categories);
+//    ?>
+<!--</pre>-->
 <h1>Blog Categories</h1>
 <?php echo $this->Html->link(
     'Add Category',

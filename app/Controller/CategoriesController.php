@@ -3,9 +3,10 @@ App::uses('AppController', 'Controller');
 
 class CategoriesController extends AppController
 {
-    var $uses = array('Category', 'Post');
+    public $uses = array('Category', 'Post');
     public $helpers = array('Html', 'Form', 'Flash');
     public $components = array('Flash');
+
 
     public function index()
     {

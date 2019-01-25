@@ -46,6 +46,17 @@
             <td><?php echo $post['Category']['title']; ?></td>
             <td><?php echo $post['User']['username']; ?></td>
         </tr>
+
     <?php endforeach; ?>
-    <?php unset($post); ?>
 </table>
+
+
+<nav>
+    <?php
+    $prev = $this->Paginator->prev('‹ ' . __('previous'), array('class' => 'prev disabled'));
+    $next = $this->Paginator->next(__('next'), array('class' => 'next disabled')) . ' ›';
+    $number = $this->Paginator->numbers(array('first' => 'First page'));
+
+    echo $prev . '　' . $number . '　' . $next;
+    ?>
+</nav>

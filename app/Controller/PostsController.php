@@ -5,11 +5,12 @@ class PostsController extends AppController
 {
     public $uses = array('Post', 'Category');
     public $helpers = array('Html', 'Form', 'Flash');
-    public $components = array('Flash');
+    public $components = array('Flash', 'Paginator');
 
     //index
     public function index()
     {
+
         $role = $this->Auth->user('role');
 
         //$is_deleted = array('is_deleted =' => 0);
@@ -23,10 +24,11 @@ class PostsController extends AppController
                 'is_deleted =' => 0
             );
         }
+        $this->Paginator->settings = $this->paginate;
 
-        $posts = $this->Post->find('all', array(
-            //'conditions' => array($is_deleted, $conditions),
+        $this->Paginator->settings = array(
             'conditions' => $conditions,
+            'limit' => 5,
             'fields' => array(
                 'id',
                 'title',
@@ -36,8 +38,10 @@ class PostsController extends AppController
                 'Category.id',
                 'Category.title'
 
-            ),
-        ));
+            )
+        );
+
+        $posts = $this->Paginator->paginate('Post');
         $this->set('posts', $posts);
     }
 

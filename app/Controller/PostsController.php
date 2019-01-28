@@ -4,8 +4,6 @@ App::uses('AppController', 'Controller');
 class PostsController extends AppController
 {
     public $uses = array('Post', 'Category');
-    public $helpers = array('Html', 'Form', 'Flash');
-    public $components = array('Flash', 'Paginator');
 
     //index
     public function index()
@@ -24,7 +22,6 @@ class PostsController extends AppController
                 'is_deleted =' => 0
             );
         }
-        $this->Paginator->settings = $this->paginate;
 
         $this->Paginator->settings = array(
             'conditions' => $conditions,
@@ -37,10 +34,8 @@ class PostsController extends AppController
                 'User.username',
                 'Category.id',
                 'Category.title'
-
             )
         );
-
         $posts = $this->Paginator->paginate('Post');
         $this->set('posts', $posts);
     }
@@ -49,12 +44,12 @@ class PostsController extends AppController
     public function view($id = null)
     {
         // if the value is not an id, throw an error
-        if (!$id) {
+        if (empty($id)) {
             throw new NotFoundException(__('Invalid post'));
         }
         // $post is post -> $id and if the value is not post show invalid post error
         $post = $this->Post->findById($id);
-        if (!$post) {
+        if (empty($post)) {
             throw new NotFoundException(__('Invalid post'));
         }
         // set() single post information
@@ -76,6 +71,7 @@ class PostsController extends AppController
         if ($this->request->is('post')) {
             $this->Post->create();
             $this->request->data['Post']['user_id'] = $this->Auth->user('id');
+
             // if data is saved, show success message and return to index
             if ($this->Post->save($this->request->data)) {
                 $this->Flash->success(__('Your post has been saved.'));
@@ -98,18 +94,19 @@ class PostsController extends AppController
         $this->set('categories', $categories);
 
         // if $id is not correct, show invalid post error
-        if (!$id) {
+        if (empty($id)) {
             throw new NotFoundException(__('Invalid post'));
         }
+
         // $post is post -> $id and if the value is not post show invalid post error
         $post = $this->Post->findById($id);
-        if (!$post) {
+        if (empty($post)) {
             throw new NotFoundException(__('Invalid post'));
         }
 
         // if the request is post or put, update the post record, else throw an error
         if ($this->request->is(array('post', 'put'))) {
-            $this->Post->id = $id;
+            //$this->Post->id = $id;
             //on save show success message and return to index
             if ($this->Post->save($this->request->data)) {
                 $this->Flash->success(__('Your post has been updated.'));
@@ -120,7 +117,7 @@ class PostsController extends AppController
         }
         // If there is no data set to $this->request->data, set data to previous post record retrieved
 
-        if (!$this->request->data) {
+        if (empty($this->request->data)) {
             $this->request->data = $post;
         }
     }
@@ -139,17 +136,19 @@ class PostsController extends AppController
 
             //update is_deleted field value to true
             $data = array('id' => $id, 'is_deleted' => 1);
-            $this->Post->save($data);
-
-
-            $this->Flash->success(
-                __('The post with id: %s has been deleted.', h($id))
-            );
-        } else {
-            $this->Flash->error(
-                __('The post with id: %s could not be deleted.', h($id))
-            );
+            if ($this->Post->save($data)) {
+                $this->Flash->success(
+                    __('The post with id: %s has been deleted.', h($id))
+                );
+            } else {
+                $this->Flash->error(
+                    __('The post with id: %s could not be deleted.', h($id))
+                );
+            }
         }
+
+        // if all is processed, return to index
+        return $this->redirect(array('action' => 'index'));
 
         // if deletion is a success show success message, else throw an error
 //        if ($this->Post->delete($id)) {
@@ -161,11 +160,10 @@ class PostsController extends AppController
 //                __('The post with id: %s could not be deleted.', h($id))
 //            );
 //        }
-        // if all is processed, return to index
-        return $this->redirect(array('action' => 'index'));
+
     }
 
-    public function isAuthorized($user)
+    public function isAuthorized($user = null)
     {
         // registered user can view index
         if (in_array($this->action, array('index', 'add'))) {

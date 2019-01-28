@@ -40,5 +40,4 @@
             <td><?php echo $user['User']['created']; ?></td>
         </tr>
     <?php endforeach; ?>
-    <?php unset($post); ?>
 </table>

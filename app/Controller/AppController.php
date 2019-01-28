@@ -32,7 +32,9 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller
 {
+    public $helpers = array('Html', 'Form', 'Flash');
     public $components = array(
+        'Paginator',
         'Flash',
         'Auth' => array(
             'loginRedirect' => array(

@@ -16,6 +16,12 @@ class User extends AppModel
         return true;
     }
 
+    public function createPassword($pass = null)
+    {
+        $passwordHasher = new BlowfishPasswordHasher();
+        return $passwordHasher->hash($pass);
+    }
+
     public $validate = array(
         'username' => array(
             'required' => array(

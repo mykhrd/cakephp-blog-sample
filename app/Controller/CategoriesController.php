@@ -4,9 +4,6 @@ App::uses('AppController', 'Controller');
 class CategoriesController extends AppController
 {
     public $uses = array('Category', 'Post');
-    public $helpers = array('Html', 'Form', 'Flash');
-    public $components = array('Flash');
-
 
     public function index()
     {
@@ -22,10 +19,10 @@ class CategoriesController extends AppController
     }
 
     //view
-    public function view()
-    {
-        $this->redirect(array('action' => 'index'));
-    }
+    //public function view()
+    //{
+    //$this->redirect(array('action' => 'index'));
+    //}
 
     //add
     public function add()
@@ -45,13 +42,14 @@ class CategoriesController extends AppController
     //edit
     public function edit($id = null)
     {
-        if (!$id) {
+        if (empty($id)) {
             throw new NotFoundException(__('Invalid category'));
         }
         $category = $this->Category->findById($id);
-        if (!$category) {
+        if (empty($category)) {
             throw new NotFoundException(__('Invalid category'));
         }
+
         if ($this->request->is(array('post', 'put'))) {
             $this->Category->id = $id;
             if ($this->Category->save($this->request->data)) {
@@ -66,15 +64,13 @@ class CategoriesController extends AppController
     }
 
     //delete
-    public function delete($id)
+    public function delete($id = null)
     {
         if ($this->request->is('get')) {
             throw new MethodNotAllowedException();
         }
 
-
         if ($this->Category->delete($id)) {
-
             $conditions = array('Post.category_id' => $id);
             $this->Post->updateAll(array(
                 $conditions,
@@ -84,8 +80,6 @@ class CategoriesController extends AppController
             $this->Flash->success(
                 __('The category with id: %s has been deleted.', h($id))
             );
-
-
         } else {
             $this->Flash->error(
                 __('The category with id: %s could not be deleted.', h($id))
